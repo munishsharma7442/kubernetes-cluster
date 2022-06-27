@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cats-pod
+  labels:
+    app.kubernetes.io/name: cats
+    app.kubernetes.io/app: cats
+  namespace: cats
+spec:
+  containers:
+  - image: 199999432832.dkr.ecr.us-east-1.amazonaws.com/cats-image:v20
+    name: cats-container  
+    ports:
+    - containerPort: 80

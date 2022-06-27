@@ -7,5 +7,5 @@ output "vpc_id" {
 
 # Add output variables
 output "public_ip-K8_cluster" {
-  value = aws_instance.K8_cluster.public_ip
+  value = aws_instance.linux_vm.public_ip
 }

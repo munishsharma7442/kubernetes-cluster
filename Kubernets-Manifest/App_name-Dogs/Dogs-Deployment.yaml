@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dogs
+  labels:
+    app.kubernetes.io/name: dogs
+    app.kubernetes.io/app: dogs
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dogs
+      app.kubernetes.io/app: dogs
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dogs
+        app.kubernetes.io/app: dogs
+    spec:
+      containers:
+      - image: 199999432832.dkr.ecr.us-east-1.amazonaws.com/dogs-image:v7
+        name: dogs
+        ports:
+        - containerPort: 80

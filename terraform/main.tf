@@ -28,19 +28,16 @@ resource "aws_default_subnet" "default" {
 }
 
 # Create Amazon Linux EC2 instances in a default VPC
-resource "aws_instance" "K8_cluster" {
+resource "aws_instance" "linux_vm" {
   ami                    = data.aws_ami.ami-amzn2.id
   key_name               = aws_key_pair.web_key.key_name
-  instance_type          = "t3.medium"
+  instance_type          = "t3.small"
   vpc_security_group_ids = [aws_security_group.linux_sg.id]
   iam_instance_profile   = "LabInstanceProfile"
-  user_data              = file("docker.sh")
-  root_block_device {
-    volume_size = 16
-  }
+  user_data = "${file("docker.sh")}"
   tags = {
-    Name = "K8_CLUSTER-EC2"
-  }
+    Name = "K8s-Cluster"
+    }
 }
 
 resource "aws_security_group" "linux_sg" {
@@ -49,31 +46,31 @@ resource "aws_security_group" "linux_sg" {
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    description = "Http"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Http"
+    from_port        = 30000
+    to_port          = 30000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+   ingress {
+    description      = "Http"
+    from_port        = 30001
+    to_port          = 30001
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
   }
   ingress {
-    description = "Http"
-    from_port   = 30001
-    to_port     = 30001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    description = "ssh"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "ssh"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
   }
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
   }
   tags = {
     Name = "allow_http"
